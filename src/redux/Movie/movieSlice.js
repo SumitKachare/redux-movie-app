@@ -13,11 +13,19 @@ export const fetchAsyncShows = createAsyncThunk("showList/fetchAsyncShows" , asy
     return res.data
 })
 
+// fetch detail async thunk
+export const fetchAsyncDetail = createAsyncThunk("detail/fetchAsyncDetail" , async(id)=>{
+    console.log("id" , id);
+    const res = await movieApi.get(`?apikey=${process.env.REACT_APP_OMDB_APIKEY}&i=${id}&plot=short`)
+    return res.data
+})
+
 
 // initial state for movies
 const initialState = {
     movieList : {},
-    showList : {}
+    showList : {},
+    detail :{}
 }
 
 // slice for movies reducer
@@ -42,6 +50,9 @@ const movieSlice = createSlice({
         },
         [fetchAsyncShows.fulfilled]: (state , {payload}) => {
             return {...state , showList :  payload}
+        },
+        [fetchAsyncDetail.fulfilled]: (state , {payload}) => {
+            return {...state , detail :  payload}
         }
     }
 })
@@ -54,6 +65,9 @@ export const getAllMovies = (state) => state.movies.movieList
 
 // get all shows selector
 export const getAllShows = (state) => state.movies.showList
+
+// get detail shows selector
+export const getDetail = (state) => state.movies.detail
 
 // export reducer
 export default movieSlice.reducer
